@@ -1,11 +1,20 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Experience from './components/Experience';
 import { TreeState } from './types';
 import { COLORS } from './constants';
 
 const App: React.FC = () => {
   const [treeState, setTreeState] = useState<TreeState>(TreeState.CHAOS);
+
+  useEffect(() => {
+    // Remove the static loader once the React app mounts
+    const loader = document.getElementById('initial-loader');
+    if (loader) {
+      loader.style.opacity = '0';
+      setTimeout(() => loader.remove(), 500);
+    }
+  }, []);
 
   const toggleState = () => {
     setTreeState(prev => prev === TreeState.CHAOS ? TreeState.FORMED : TreeState.CHAOS);
@@ -26,7 +35,6 @@ const App: React.FC = () => {
             <h1 className="text-4xl sm:text-6xl font-serif italic tracking-tighter" style={{ color: COLORS.GOLD_METALLIC }}>
               Merry Christmas
             </h1>
-            {/* Subtitle: Smaller, unbolded, and constrained width to stay within title bounds */}
             <p className="text-[10px] sm:text-xs uppercase tracking-wider opacity-80 leading-relaxed max-w-[180px] sm:max-w-[320px]" style={{ color: COLORS.GOLD_BRIGHT }}>
               Christmas Begins, Goodness Comes 2026
             </p>
@@ -40,7 +48,6 @@ const App: React.FC = () => {
 
         {/* Footer Controls */}
         <div className="flex flex-col sm:flex-row justify-between items-end gap-8 pointer-events-auto">
-          {/* Narrower container to keep text away from the center tree */}
           <div className="max-w-xs sm:max-w-sm space-y-4">
             <p className="text-xs sm:text-sm leading-relaxed opacity-70 italic" style={{ color: COLORS.WHITE_SOFT }}>
               Yes, VIRGINIA, there is a Santa Claus. He exists as certainly as love and generosity and devotion exist, and you know that they abound and give to your life its highest beauty and joy.
@@ -57,9 +64,7 @@ const App: React.FC = () => {
             onClick={toggleState}
             className="group relative px-10 py-4 bg-emerald-950/40 border border-[#D4AF37]/30 hover:border-[#D4AF37] transition-all duration-700 overflow-hidden"
           >
-            {/* Hover Shine Effect */}
             <div className="absolute inset-0 w-1/2 h-full skew-x-[-30deg] bg-white/10 -translate-x-full group-hover:translate-x-[250%] transition-transform duration-1000 ease-in-out" />
-            
             <span className="relative z-10 text-lg sm:text-xl font-medium tracking-widest uppercase transition-colors" 
                   style={{ color: COLORS.GOLD_METALLIC }}>
               {treeState === TreeState.CHAOS ? 'Assemble Tree' : 'Scatter Elements'}
@@ -70,9 +75,6 @@ const App: React.FC = () => {
 
       {/* Decorative Borders */}
       <div className="absolute inset-0 pointer-events-none border-[1px] border-[#D4AF37]/10 m-4" />
-      <div className="absolute inset-0 pointer-events-none border-[1px] border-[#D4AF37]/5 m-6" />
-      
-      {/* Corner Ornaments */}
       <div className="absolute top-0 left-0 w-24 h-24 border-t-2 border-l-2 border-[#D4AF37]/20 m-8" />
       <div className="absolute bottom-0 right-0 w-24 h-24 border-b-2 border-r-2 border-[#D4AF37]/20 m-8" />
     </div>

@@ -7,24 +7,66 @@
     <title>Grand Luxury Christmas Tree</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      body { margin: 0; padding: 0; overflow: hidden; background-color: #01120b; color: #D4AF37; }
-      canvas { display: block; }
+      body { 
+        margin: 0; 
+        padding: 0; 
+        overflow: hidden; 
+        background-color: #01120b; 
+        color: #D4AF37; 
+      }
+      #root { width: 100vw; height: 100vh; }
+      
+      /* Initial Loading Spinner */
+      .loader-container {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #01120b;
+        z-index: 100;
+        font-family: serif;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 2px solid rgba(212, 175, 55, 0.2);
+        border-top-color: #D4AF37;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .loading-text {
+        font-size: 10px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0.6;
+      }
     </style>
   <script type="importmap">
 {
   "imports": {
-    "@react-three/fiber": "https://esm.sh/@react-three/fiber@^9.4.2",
-    "@react-three/drei": "https://esm.sh/@react-three/drei@^10.7.7",
-    "@react-three/postprocessing": "https://esm.sh/@react-three/postprocessing@^3.0.4",
-    "three": "https://esm.sh/three@^0.182.0",
     "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
+    "@react-three/fiber": "https://esm.sh/@react-three/fiber@^9.4.2",
+    "@react-three/postprocessing": "https://esm.sh/@react-three/postprocessing@^3.0.4",
+    "three": "https://esm.sh/three@^0.182.0",
+    "@react-three/drei": "https://esm.sh/@react-three/drei@^10.7.7",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
   }
 }
 </script>
 </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loader-container" id="initial-loader">
+        <div class="spinner"></div>
+        <div class="loading-text">Initializing 3D Experience</div>
+      </div>
+    </div>
+    <!-- Critical Fix: Reference the entry point file -->
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
