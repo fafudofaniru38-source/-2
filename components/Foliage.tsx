@@ -1,16 +1,8 @@
 
 import React, { useMemo, useRef } from 'react';
-import { useFrame, ThreeElements } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { FOLIAGE_COUNT, TREE_HEIGHT, TREE_RADIUS, CHAOS_RADIUS } from '../constants';
-
-declare global {
-  namespace React {
-    namespace JSX {
-      interface IntrinsicElements extends ThreeElements {}
-    }
-  }
-}
+import { FOLIAGE_COUNT, TREE_HEIGHT, TREE_RADIUS, CHAOS_RADIUS, COLORS } from '../constants';
 
 const vertexShader = `
   attribute vec3 chaosPosition;
@@ -20,9 +12,11 @@ const vertexShader = `
   varying vec3 vColor;
 
   void main() {
+    // Smoother interpolation with a bit of noise
     float p = clamp(uProgress, 0.0, 1.0);
     vec3 pos = mix(chaosPosition, targetPosition, p);
     
+    // Add subtle waving motion
     pos.x += sin(uTime * 0.5 + pos.y) * 0.05 * (1.0 - p);
     pos.z += cos(uTime * 0.5 + pos.y) * 0.05 * (1.0 - p);
 
@@ -30,6 +24,7 @@ const vertexShader = `
     gl_PointSize = (15.0 / -mvPosition.z) * (1.0 + 0.5 * sin(uTime + pos.x));
     gl_Position = projectionMatrix * mvPosition;
     
+    // Color logic: more emerald as it forms
     vColor = mix(vec3(0.1, 0.4, 0.2), vec3(0.02, 0.22, 0.15), p);
   }
 `;
@@ -56,6 +51,7 @@ const Foliage: React.FC<FoliageProps> = ({ progress }) => {
     const target = new Float32Array(FOLIAGE_COUNT * 3);
 
     for (let i = 0; i < FOLIAGE_COUNT; i++) {
+      // Chaos: Random in sphere
       const r_c = Math.pow(Math.random(), 1/3) * CHAOS_RADIUS;
       const theta_c = Math.random() * Math.PI * 2;
       const phi_c = Math.acos(2 * Math.random() - 1);
@@ -63,11 +59,12 @@ const Foliage: React.FC<FoliageProps> = ({ progress }) => {
       chaos[i * 3 + 1] = r_c * Math.sin(phi_c) * Math.sin(theta_c);
       chaos[i * 3 + 2] = r_c * Math.cos(phi_c);
 
+      // Target: Cone shape
       const h = Math.random() * TREE_HEIGHT;
       const r_t = (1 - h / TREE_HEIGHT) * TREE_RADIUS * Math.pow(Math.random(), 0.5);
       const theta_t = Math.random() * Math.PI * 2;
       target[i * 3] = r_t * Math.cos(theta_t);
-      target[i * 3 + 1] = h - (TREE_HEIGHT / 2);
+      target[i * 3 + 1] = h - (TREE_HEIGHT / 2); // Center tree vertically
       target[i * 3 + 2] = r_t * Math.sin(theta_t);
     }
 
@@ -82,6 +79,7 @@ const Foliage: React.FC<FoliageProps> = ({ progress }) => {
   useFrame((state) => {
     if (meshRef.current) {
       const mat = meshRef.current.material as THREE.ShaderMaterial;
+      // Exponentially approach the progress for "physical" feel
       mat.uniforms.uProgress.value = THREE.MathUtils.lerp(mat.uniforms.uProgress.value, progress, 0.05);
       mat.uniforms.uTime.value = state.clock.elapsedTime;
     }
