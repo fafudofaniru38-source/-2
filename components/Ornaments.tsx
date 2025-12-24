@@ -1,9 +1,17 @@
 
 import React, { useMemo, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, ThreeElements } from '@react-three/fiber';
 import * as THREE from 'three';
 import { ORNAMENT_COUNT, TREE_HEIGHT, TREE_RADIUS, CHAOS_RADIUS, COLORS } from '../constants';
 import { OrnamentData } from '../types';
+
+declare global {
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements extends ThreeElements {}
+    }
+  }
+}
 
 interface OrnamentsProps {
   progress: number;
@@ -76,8 +84,6 @@ const Ornaments: React.FC<OrnamentsProps> = ({ progress }) => {
   useFrame((state) => {
     const refs = [ballRef, giftRef, lightRef];
     const types = ['BALL', 'GIFT', 'LIGHT'] as const;
-    
-    // Calculate the current maximum height of the ribbon based on progress
     const ribbonLimitY = progress * TREE_HEIGHT - (TREE_HEIGHT / 2);
 
     refs.forEach((ref, idx) => {
@@ -113,10 +119,8 @@ const Ornaments: React.FC<OrnamentsProps> = ({ progress }) => {
         tempColor.set(orn.color);
         
         if (orn.type === 'LIGHT') {
-          // Check if ribbon has "reached" this light's target height
           const isReached = y <= ribbonLimitY + 0.2;
           const flicker = Math.sin(state.clock.elapsedTime * 10 + (ornIdx * 0.8)) > 0.4 ? 1.0 : 0.2;
-          // Lights stay off until ribbon passes them, then they pulse and glow
           const intensity = isReached ? (1 + newP * 12 * flicker) : 0;
           tempColor.multiplyScalar(intensity);
         } else if (orn.type === 'BALL') {

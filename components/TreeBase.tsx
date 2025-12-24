@@ -1,8 +1,16 @@
 
 import React, { useRef, useMemo } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, ThreeElements } from '@react-three/fiber';
 import * as THREE from 'three';
 import { TREE_HEIGHT, COLORS } from '../constants';
+
+declare global {
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements extends ThreeElements {}
+    }
+  }
+}
 
 const TreeBase: React.FC<{ progress: number }> = ({ progress }) => {
   const starRef = useRef<THREE.Mesh>(null);
@@ -48,8 +56,6 @@ const TreeBase: React.FC<{ progress: number }> = ({ progress }) => {
       starRef.current.rotation.y += 0.02;
       
       const material = starRef.current.material as THREE.MeshStandardMaterial;
-      
-      // Adjusted flare and base brightness to be less overpowering
       const flare = progress > 0.98 ? 6.0 : 1.2;
       const pulse = Math.sin(state.clock.elapsedTime * 2.0) * (progress > 0.98 ? 0.8 : 0.3);
       material.emissiveIntensity = THREE.MathUtils.lerp(material.emissiveIntensity, flare + pulse, 0.1);

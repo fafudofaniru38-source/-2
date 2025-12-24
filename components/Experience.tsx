@@ -1,6 +1,6 @@
 
 import React, { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, ThreeElements } from '@react-three/fiber';
 import { OrbitControls, Environment, PerspectiveCamera, Stars, Float } from '@react-three/drei';
 import { EffectComposer, Bloom, Noise, Vignette } from '@react-three/postprocessing';
 import Foliage from './Foliage';
@@ -8,6 +8,15 @@ import Ornaments from './Ornaments';
 import TreeBase from './TreeBase';
 import Ribbon from './Ribbon';
 import { TreeState } from '../types';
+
+// React 19 JSX 命名空间增强，防止 intrinsic elements (mesh, group 等) 报错
+declare global {
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements extends ThreeElements {}
+    }
+  }
+}
 
 interface ExperienceProps {
   treeState: TreeState;
@@ -47,7 +56,7 @@ const Experience: React.FC<ExperienceProps> = ({ treeState }) => {
           autoRotateSpeed={0.5}
         />
 
-        <EffectComposer disableNormalPass>
+        <EffectComposer enableNormalPass={false}>
           <Bloom 
             luminanceThreshold={0.8} 
             mipmapBlur 
