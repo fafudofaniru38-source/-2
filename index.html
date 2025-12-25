@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Grand Luxury Christmas Tree</title>
+    <!-- 使用更稳定的 Tailwind 静态样式支持，或者在构建时处理 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       body { 
@@ -16,7 +17,7 @@
       }
       #root { width: 100vw; height: 100vh; }
       
-      /* Initial Loading Spinner */
+      /* 初始加载 UI */
       .loader-container {
         position: fixed;
         inset: 0;
@@ -48,13 +49,13 @@
   <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
     "@react-three/fiber": "https://esm.sh/@react-three/fiber@^9.4.2",
-    "@react-three/postprocessing": "https://esm.sh/@react-three/postprocessing@^3.0.4",
     "three": "https://esm.sh/three@^0.182.0",
     "@react-three/drei": "https://esm.sh/@react-three/drei@^10.7.7",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+    "@react-three/postprocessing": "https://esm.sh/@react-three/postprocessing@^3.0.4"
   }
 }
 </script>
@@ -66,7 +67,7 @@
         <div class="loading-text">Initializing 3D Experience</div>
       </div>
     </div>
-    <!-- Critical Fix: Reference the entry point file -->
-    <script type="module" src="/index.tsx"></script>
+    <!-- 核心修复：使用相对路径以适配所有部署环境 -->
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>

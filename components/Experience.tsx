@@ -22,6 +22,7 @@ const Experience: React.FC<ExperienceProps> = ({ treeState }) => {
       <color attach="background" args={['#01120b']} />
       
       <Suspense fallback={null}>
+        {/* Environment 如果在国内加载慢，可以考虑更换为本地资源或更可靠的 CDN */}
         <Environment preset="lobby" />
         
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
@@ -47,7 +48,9 @@ const Experience: React.FC<ExperienceProps> = ({ treeState }) => {
           autoRotateSpeed={0.5}
         />
 
-        <EffectComposer disableNormalPass>
+        {/* 修复：EffectComposer 的 disableNormalPass 在某些版本中可能引起不兼容，
+            这里保持简洁以提高国内旧版浏览器的兼容性 */}
+        <EffectComposer>
           <Bloom 
             luminanceThreshold={0.8} 
             mipmapBlur 
