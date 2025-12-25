@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Grand Luxury Christmas Tree</title>
-    <!-- Tailwind CSS 生产环境下建议通过构建工具打包，这里保留以维持样式 -->
+    <!-- 使用 Tailwind Play CDN，虽然有警告但适合快速演示。建议生产环境通过构建工具打包 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       body { 
@@ -27,12 +27,12 @@
         background: #01120b;
         z-index: 100;
         font-family: serif;
-        transition: opacity 0.5s ease-out;
+        transition: opacity 0.8s ease-in-out;
       }
       .spinner {
         width: 40px;
         height: 40px;
-        border: 2px solid rgba(212, 175, 55, 0.2);
+        border: 3px solid rgba(212, 175, 55, 0.1);
         border-top-color: #D4AF37;
         border-radius: 50%;
         animation: spin 1s linear infinite;
@@ -41,9 +41,10 @@
       @keyframes spin { to { transform: rotate(360deg); } }
       .loading-text {
         font-size: 10px;
-        letter-spacing: 0.3em;
+        letter-spacing: 0.4em;
         text-transform: uppercase;
-        opacity: 0.6;
+        color: #D4AF37;
+        opacity: 0.8;
       }
     </style>
   <script type="importmap">
@@ -64,10 +65,12 @@
     <div id="root">
       <div class="loader-container" id="initial-loader">
         <div class="spinner"></div>
-        <div class="loading-text">Initializing 3D Experience</div>
+        <div class="loading-text">Loading 3D Atmosphere</div>
       </div>
     </div>
-    <!-- 关键修复：确保路径正确。注意：如果是静态部署，必须确保有 Vite/Webpack 转换 tsx -->
-    <script type="module" src="/index.tsx"></script>
+    <!-- 核心修复：使用 ./index.tsx。 
+         注意：在 GitHub Pages 上直接运行 .tsx 需要通过 Actions 或 Vite 构建。
+         如果你手动上传，请确保仓库中有 package.json 并开启了 GitHub Actions 构建流程。 -->
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
